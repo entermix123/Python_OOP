@@ -1,0 +1,353 @@
+ENCAPSULATION:
+
+MOST IMPORTANT FEATURES:
+
+1. Give us possibility to validate data and set restrictions and prevent accidental modification. 
+2. Packing data and functions into a single component.
+
+Can be attributes or / and methods!
+
+double underscore attributes are private -> __pin  ----> PRIVATE MOST USED FOR ENCAPSULATION, cannot be accessed outside class
+
+# In strongly typed languages, this attributes can be accessed and modified only in the class they are created! Cannot be inherited in other classes! It making name of the attribute call more safisticated but not imposible - name mangling (погрозняване на името):
+print(object_name._class_name__attribute_name) --> bad practice
+
+single underscore attributes are protected -> _pin ---> PROTECTED, can be accessed outside class
+
+# In strongly typed languages, protected attributes can be used in base classes adn inheritence classes, but cannot accessed outside these classes!!!
+
+PYTHON IS WEAK IN ENCAPSULATION! EVERITHING IN PYTHON IS PUBLIC!!! MOST USED IT WHEN IT HAVE TO BE CLEAR TO EDITOR THAT THIS ATTRIBUTE SHOULD NOT BE CALLED OUTSIDE OR MANIPULATED! IN STRONGLY TYPED LANGUAGES ENCAPSULATION IS MORE USABLE! IN PYTHON THERE IS NO DIFFERENCE BETWEEN __ATTRIBUTE AND _ATTRIBUTE! THEY CAN BE CALLED FROM ANYWHERE IF WE KNOW THE FORMULA!
+print(object_name._class_name__attribute_name) - private attributes
+print(object_name._class_name_attribute_name) - protected attributes
+
+### dunder methods are not privet or protected!
+
+
+GETTERS AND SETTERS - property decorators: DECORATORS: are navigators between class methods. They starts with '@'
+
+1. They are used to access protected and private attributes.
+2. Vlidate values to attributes. 
+3. Automatically set values to attributes without using separtaed class methods or functions. 
+	- without decorators: danio = Person() \n danio.set_age(38) 
+	- with decorators: danio = Person() \n danio.age = 38
+
+---------------------------------------------------------------------------------
+Short way to create getters and setters in pycharm is to type 'props' and hit enter. Default getter and setter functions are created and we can fill all properties simultaniously! Mostly used when getters and setters are coded.
+---------------------------------------------------------------------------------
+
+In encapsulation we use private attributes because they create new variables and prevent recursion in getter-setter connection 
+
+Build in functions for accessing attributes: they wait action to accure and act as setted. can be used as protection.
+--------------------------------------------------------------------------------------------
+** getattr() - search attribute in class. If no match is found, return AttributError is returned. If end parameter is set to None, return None instead:
+
+	class Person:
+		def __init__(self, name):
+			self.name = name
+	person = Person('Peter')
+	print(getattr(person, 'name')) # True
+	print(getattr(person, 'age')) # AttributeError
+	print(getattr(person, 'age', 'None')) # None
+
+
+if method is used as dunder:
+	
+	classs Phone:
+
+		def __getattr__(self, attr):	
+			retunr None      		# if user try to access any attribute return None
+			## if return attr
+
+	phone = Phone()
+	print(phone.color) # None	## color
+
+** hasattr(), __hasattr__ - return True/False if given attribute exists! No errors returned - safe!
+
+	class Person:
+		def __init__(self, name):
+			self.name = name
+	person = Person('Peter')
+	print(hasattr(person, 'name')) # True
+	print(hasattr(person, 'age')) # False
+
+
+** setattr(), __setattr__ - set attribute:
+
+	class Person:
+    		def __init__(self, name):
+        		self.name = name
+
+
+	person = Person('Peter')
+	print(setattr(person, 'name', 'George')) # None
+	print(person.name) # George
+	print(setattr(person, 'age', 21)) # None
+
+if method is used as dunder:
+	
+	class Person:
+    		def __setattr__(self, attr, value):
+        		self.__dict__[attr] = value.upper()
+	
+
+	phone = Phone()
+	phone.color = 'blue'
+	phone.name = 'Samsung'
+	print(phone.color)  # BLUE
+	print(phone.name)  # SAMSUNG
+
+
+** delattra(), __deflattr__() - used to delete attribute. Can be used to restrict if someone try to delete attribute:
+
+	class Person:
+    		def __init__(self, name):
+        		self.name = name
+
+
+	person = Person('Peter')
+	print(person.name)              # Peter
+	print(delattr(person, 'name'))  # None
+	print(person.name)              # AttributeError
+
+if method is used as dunder:
+
+	class Phone:
+    		def __delattr__(self, attr):
+        		del self.__dict__[attr]				# return None not deleted
+        		print(f"'{str(attr)}' was deleted")
+
+        
+	phone = Phone()
+	phone.color = 'black'
+	del phone.color		 # 'color' was deleted
+
+
+good practice is these magic methods to be added at the end
+----------------------------------------------------------------------------------------
+Example for protected attributes __attribute -> private attribute. This attributes can be accessed and modified only in the class they are created!
+
+class CreditCard:
+    def __init__(self, number, name: str, cvv: str, expiration_date: str, pin: str):
+        self.number = number
+        self.name = name
+        self.expiration_date = expiration_date
+        self.cvv = cvv
+        self.__pin = pin        # private attribute
+
+mastercard = CreditCard('411111111111111', 'Test name', "123", "2024-11", "0000")
+
+---------------------------------------------------------------------------------------
+How we can call and see protected attribute:
+
+print(mastercard._CreditCard__pin)			# we can call and see it, but cannot change it!  # '0000'
+---------------------------------------------------------------------------------------
+
+class CreditCard:
+    def __init__(self, number, name: str, cvv: str, expiration_date: str, pin: str):
+        self.number = number
+        self.name = name
+        self.expiration_date = expiration_date
+        self.cvv = cvv
+        self.__pin = pin        # private attribute
+
+    def get_pin(self):
+        return self.__pin
+
+
+mastercard = CreditCard('411111111111111', 'Test name', "123", "2024-11", "0000")
+print(mastercard.get_pin()) # 0000
+
+---------------------------------------------------------------------------------------
+
+Encapsulation in Python is week encapsulation, because we can call the private attribute with method above!
+
+In Python everithing is public by default!
+
+Example for protected attributes _attribute -> protected attribute. We can call it in inherience classes !!!
+
+class CreditCard:
+    def __init__(self, number, name: str, cvv: str, expiration_date: str, pin: str):
+        self.number = number
+        self.name = name
+        self.expiration_date = expiration_date
+        self.cvv = cvv
+        self._pin = pin        # protected attribute
+
+In strongly typed language, protected attributes can be used in base classes adn inheritence classes, but cannot accessed outside these classes!!!
+
+
+DOUBLE EXAMPLE - for procetcted(one underscore) and private(double underscore) attributes:
+
+----------------------------------------------------------------------------------------------------------
+class CreditCard:
+    def __init__(self, number, name: str, cvv: str, expiration_date: str, pin: str, pin1: str):
+        self.number = number
+        self.name = name
+        self.expiration_date = expiration_date
+        self.cvv = cvv
+        self._pin = pin         # protected attribute
+        self.__pin1 = pin1      # private attribute
+
+    def get_protected_pin(self):
+        return self._pin        # protected attribute
+
+    def get_private_pin(self):
+        return self.__pin1      # private attribute
+
+
+class ChildrenCreditCard(CreditCard):
+    def __init__(self, number, name: str, cvv: str, expiration_date: str, pin: str):
+        super().__init__(number, name, cvv, expiration_date, pin)
+        self._pin = pin
+
+
+mastercard = CreditCard('411111111111111', 'Test name', "123", "2024-11", "0000", "0001")
+print(mastercard.get_protected_pin())
+print(mastercard.get_private_pin())
+
+----------------------------------------------------------------------------------------------------------
+
+If we try to change private attribute outside of the owner class without mengled formula, python create new attribute that is different from the private attribute! 
+
+
+GETTERS AND SETTERS - property decorators: DECORATORS: are navigators between class methods. They starts with '@'
+
+1. They are used to access protected and private attributes.
+2. Vlidate values to attributes. 
+3. Automatically set values to attributes without using separtaed class methods or functions. 
+	- without decorators: danio = Person() \n danio.set_age(38) 
+	- with decorators: danio = Person() \n danio.age = 38
+
+
+SETTERS ARE USED FOR VALIDATION OF REQUREMENTS OF THE ATTRIBUTE!
+
+GETTERS:
+
+	@property                   # decorator getter, name of the property is same for all attributes getter
+    	def age(self):              # before return, the getter goes true the setter.
+        return self.__age
+
+SETTERS:
+
+	@age.setter                 # decorator setter, the name starts with attribute name!
+    	def age(self, age):
+		raise...
+
+---------------------------------------------------------------------------------
+Short way to create getters and setters in pycharm is to type 'props' and hit enter. Default getter and setter functions are created and we can fill all properties simultaniously! Mostly used when getters and setters are coded.
+---------------------------------------------------------------------------------
+
+-----------------------------------------
+class Person:
+
+    def __init__(self, age=0):
+        self.age = age
+
+    @property                   # decorator getter, name of the property is same for all attributes getter
+    def age(self):              # before return, the getter goes true the setter.
+        return self.__age       # if age is not private or protected attribute, recursion is enabled. infinite loop in the setter!
+
+    @age.setter                 # decorator setter, the name starts with attribute name!
+    def age(self, age):
+        if age < 0:
+            raise ValueError('Age cannot be negative!')
+        if age < 18:
+            self.__age = 18     # if age is not private or protected attribute, recursion is enabled. infinite loop in the setter!
+        else:
+            self.__age = age    # if age is not private or protected attribute, recursion is enabled. infinite loop in the setter!
+
+
+	danio = Person()
+	danio.age = 18
+	print(danio.age)
+
+-----------------------------------------
+
+Example for validation of profile's username and password: D:\Python Projects\SoftUniOOPFeb2023\4. Encapsulation\3_profile.py
+-------------------------------------------------------------------------------------
+class Profile:
+
+    def __init__(self, username: str, password: str, ):     # initialize the class
+        self.username = username            # set the username
+        self.password = password            # set the password
+
+    @property                               # getter of username
+    def username(self):
+        return self.__username
+
+    @username.setter                        # setter of username
+    def username(self, value):
+        if not 5 <= len(value) <= 15:       # validate the username, must be more than 5 char and less than 15 chars
+            raise ValueError("The username must be between 5 and 15 characters.")   # error if the username is not valid
+        self.__username = value             # set the username if valid
+
+    @property                               # getter of password
+    def password(self):
+        return self.__password
+
+    @password.setter                        # setter of password
+    def password(self, value):
+
+        # validate the password: must be 8 chars at least, must contain at least 1 digit and 1 uppercase letter
+        if len(value) < 8 or not any(x.isdigit() for x in value) or not any(k.isalpha() and k == k.upper() for k in value):
+
+            # raise error if the password is not valid
+            raise ValueError("The password must be 8 or more characters with at least 1 digit and 1 uppercase letter.")
+
+        self.__password = value             # set the password if valid
+
+    def __str__(self):                      # return a string representation of the profile
+        return f"You have a profile with username: \"{self.username}\" and password: {'*' * len(self.__password)}"
+
+
+correct_profile = Profile("Username", "Passw0rd")
+print(correct_profile)
+-------------------------------------------------------------------------------------
+
+We can extend the logic of the getters, but must return something! Otherwise will return 'None'
+
+PRIVET RULES ARE VALID FOR CLASS METHODS !!!
+
+
+Email validator example with private class methods:
+------------------------------------------------------------------------------------
+class EmailValidator:
+
+    def __init__(self, min_length: int, mails: list, domains: list):   # initialize with list of mails and domains
+        self.min_length = min_length
+        self.mails = mails
+        self.domains = domains
+
+    def __is_name_valid(self, name: str):       # validate length of name
+        return len(name) >= self.min_length
+
+    def __is_mail_valid(self, mail: str):       # check if mail is in list of mails
+        return mail in self.mails               # boolean result True/False
+
+    def __is_domain_valid(self, domain: str):   # check if domain is in list of domains
+        return domain in self.domains           # boolean result True/False
+
+    def validate(self, email: str):             # validate email
+        name, rest = email.split('@')           # split email by '@' symbol
+        mail, domain = rest.split('.')          # split email and domain by '.' symbol
+
+        # validate name, mail and domain
+        if self.__is_name_valid(name) and self.__is_mail_valid(mail) and self.__is_domain_valid(domain):
+            return True
+        else:
+            return False
+
+
+mails = ["gmail", "softuni"]
+domains = ["com", "bg"]
+email_validator = EmailValidator(6, mails, domains)
+print(email_validator.validate("pe77er@gmail.com"))
+print(email_validator.validate("georgios@gmail.net"))
+print(email_validator.validate("stamatito@abv.net"))
+print(email_validator.validate("abv@softuni.bg"))
+--------------------------------------------------------------------------------------
+
+
+
+
+
