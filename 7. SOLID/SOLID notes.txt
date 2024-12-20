@@ -1,0 +1,134 @@
+SOLID: created by Unkle BOB, good short review in the beggining of the exercise SOLID video: https://softuni.bg/trainings/resources/video/81639/video-16-march-2023-diyan-kalaydzhiev-python-oop-february-2023/3964
+
+Used by: JAVA, C#, Python, Ruby, PHP, TypeScript, Kotlin and more
+
+Using these principles, we can prevent potential problems !!! Makes the code easy to understand and maintain!
+
+Single Responsibility
+Open/Close
+Liskov substitution
+Interface Segragation
+Dependency Inversion
+
+----------------------
+Single Responsibility
+----------------------
+
+1. Each class is responsible for only one thing and should have only one reason to change !!!
+
+	* good encapsulation of data - the class is responsible only for his own data and avoid access and manipulation of data from other classes or modules. when something goes wrong is more clear where the problem is!
+	* usng compositions - make structure of base class and more inherited classes. Every one of them should be responsible for sungle task. Then we can create more safisticated class for one main task!
+	* more small modules and classes are more easy for testing.
+
+2. A class that has many responsibilities is coupling these responsibilities together, which leads to complexity and fragility !!! 
+
+
+
+---------------------
+Open/Close
+---------------------
+
+1. OPEN for extensions and CLOSED for modification of existing code! That can be achieved by:
+	Example: D:\Python Projects\SoftUniOOPFeb2023\7. SOLID\examples.py
+
+---------------------
+Liskov Substitution - Usage of instances of child class in parent class without errors! Same behavior!
+---------------------
+
+1. fundamental to a good object-oriented software design because it emphasizes one of its core traits – polymorphism
+
+	▪ It is about creating correct hierarchies so that classes derived from a base one are polymorphic along the parent one
+
+	▪ Carefully thinking about new classes in the way that LSP suggests helps us to extend the hierarchy correctly
+
+Correct inheritence of base class. Redundant usage of instances. If calss B is iherited to A, instances of class B can be used in class A with no errors.
+	* Base class and inherited class have methods with same names and functiionality
+	Example: D:\Python Projects\SoftUniOOPFeb2023\7. SOLID\examples.py
+
+Close to Inheritence and Polimorphism and give them shape. Liskov and Open/Close is perfect polimorphism.
+
+* Design smell - violation of good principles in coding:
+	▪ If the code is checking the type of class - bad code
+	▪ Overridden methods change their behavior - hard to find
+	▪ Override a method of the superclass by an empty method - bugs and errors
+	▪ Base class depends on its subtypes - hard to extend and maintain code
+
+---------------------
+Interface Segregation
+---------------------
+
+1. A client should not depend on methods it does not use. Аchieved with abstract classes and Protocols.
+	*Defining small focused interfaces, specific for the needs of every client, but not one big interface. 
+
+	* Acheaved by 
+
+	Good examle is printer: Not every client use scan, print and fax on one usage. So the client must not be forced to use the methods connected with all functions of the printer. The client should select the function that he want to use and not be forced to make more actions that are needed! We can see this principle in most interfaces we use on daly bases
+
+	▪ A good way of ensuring this is by separation through multiple inheritance
+	▪ Тhis is precisely the purpose of the mix-ins - to provide multiple clients with specific  ehaviours
+
+2. ISP is intended to keep a system decoupled and thus easier to refactor, change, and redeploy
+
+PYTHON DO NOT HAVE INTERFACES!!!
+
+3. Violations:
+	* mismatch of classes names and their functions - confusion when code is reviewed or maintained
+	* inherit classes are forced to use method that are not relevant for them - unnecessary complexity
+
+---------------------
+Dependency Inversion
+---------------------
+
+1. Interesting design principle by which we protect our code by making it independent of things that are fragile, volatile, or out of our control
+
+2. Depend on abstractions, not on concretions
+	▪ High-level modules should not depend on low-level modules. Both should depend on abstractions
+	▪ Abstractions should not depend on details. Details should depend on abstractions
+
+example: D:\Python Projects\SoftUniOOPFeb2023\7. SOLID\examples.py
+
+3. Dependency Injection:
+
+▪ Software engineering technique for defining the dependencies among objects
+▪ Why use Dependency Injection?
+	▪ Decreases coupling between a class and its dependency
+	▪ Can be applied to legacy code as a refactoring because it doesn’t require any change in code behaviour
+	▪ Allows a client to remove all knowledge of a concrete implementation that it needs to use
+
+Pros: 
+1. Increased flexibility in the code which allow replacement of focused dependancy or code behavior. Easy testing! 
+2. Better organization of the code by segregation of the problems and lowering of the connections between classes and functions. - More "easy" and clear code! Easier to understand and maintain.
+
+Example: Constructor Injection
+----------------------------------
+Problem: # dependancy of class Email !!!
+
+class Email:
+	def send_email(self):
+		pass
+
+class Notification:
+	def __init__(self):
+		self._email = Email()		# dependancy of class Email !!!
+
+	def promotional_notification(self):
+		self._email.send_email()
+
+----------------------------------
+Solution using abstraction:
+
+class MessageService:
+	def send_message(self):
+		pass
+
+class Email(MessageService):
+	def send_message(self):
+		pass
+
+class Notification:
+	def __init__(self, service: MessageService):	# Constructor Injection
+		self._service = service
+
+	def promotional_notification(self):
+		self._service.send_message()
+----------------------------------
