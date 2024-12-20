@@ -1,0 +1,88 @@
+What is Iterator - class who implement iterator protocol or object, modified with __iter__()
+
+	What is iterator protocol? Class who implement methods __iter__ and __next__.
+
+Iterator protocols in pyhon:
+
+	__iter__() - return the object of the iterator and using initialize if the iterator
+
+	__next__() - returns next element of the iterator and raise StopIteration
+
+Examples:
+
+# Example take range from class
+----------------------------------------------
+ class MyRange:
+
+     def __init__(self, start, end):
+         self.start = start
+         self.end = end
+
+     def __iter__(self):
+         return self
+
+     def __next__(self):
+         if self.start < self.end:
+             result = self.start
+             self.start += 1
+             return result
+         else:
+             raise StopIteration
+
+
+ for i in MyRange(1, 6):     # for cycle receive range directly from class
+     print(i, end=" ")	     # 1, 2, 3, 4, 5
+----------------------------------------------
+Main usage is when we want to receive data element by element and we can customize how to receive it.
+for x in string: cycle in puthon call iter() method!
+
+
+
+
+GENERATORS: Function that have key word 'yield' inside and generate objects in live iteration.
+	
+	What yield do?
+
+	yield: return the result of the function and save the state when returned. On next call of next() of this generator, we contiue from the last yield we stopped on.
+
+	* Generators are a simple way of creating iterators
+	* This iterator can later be iterated over (one value at a time)
+
+Advantages:
+	* take searched elements live in iteration - not always have to iterate true all data in collection
+	* break iteration when done and save only searched data - save memory
+
+
+
+
+
+Using yield but not return!!! yield take the current object and pause. Continue to the next one, qhen called again. 
+
+Return break the function and do not continue.
+
+# connection with continue and break statemants in cycles:
+	return = break
+	yield = continue	
+
+
+The yield Statement:
+	▪ If a function contains at least one yield statement, it becomes a generator function
+	▪ Both yield and return will return a value from a function
+	▪ The difference between yield and return is that the return statement terminates a function entirely
+	▪ Yield, however pauses the function saving all its states, and later continues from there on successive calls
+
+Example:
+------------------------
+def my_generator(n):
+    i = 0
+
+    while i < n:
+        yield i	# save the current state of og the function
+        i += 1
+
+
+gen = my_generator(5)
+
+for value in gen:
+    print(value, end=" ")
+-----------------------
