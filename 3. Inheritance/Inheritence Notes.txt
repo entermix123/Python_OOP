@@ -1,0 +1,264 @@
+-----------------------------------------------------------------------
+IMPORTANT:
+
+IF WE HAVE PROBLEMS WITH IMPORTS IN THE DIFFERENT FILES, WE HAVE TO SET DIRECTORY ABOVE PROJECT DIRECTORY AS SOURCE DIRECTORY:
+
+RIGHT CLICK/MARK DIRECTORY AS/SOURCE ROOT
+----------------------------------------------------------------------
+
+
+super() - Important method !!! - call methods from base class or whoever upper class in hierarchy is, but ony one level in depth!!! 
+
+good example: D:\Python Projects\SoftUniOOPFeb2023\4. Encapsulation\Exercise\project_restaurant
+
+Example:
+--------------------------------------------------------------
+class Person:
+    def __init__(self, name, age):      # base class
+        self.name = name                # base class parameter1
+        self.age = age                  # base class parameter2
+
+    def get_details(self):
+        return f'Name: {self.name}, Age: {self.age}'        # base class method
+
+
+class Student(Person):                                      # inherited from Person class
+    def __init__(self, name, age, rollno):                  # second class initialization
+        super().__init__(name, age)                         # second class inheritance from base class
+        self.rollno = rollno                                # second class specific parameter
+
+    def get_details(self):
+        return f'Name: {self.name}, Age: {self.age}, Rollno: {self.rollno}'
+
+
+person = Person('John', 30)
+student = Student('Mike', 30, 123)
+
+print(person.get_details())
+print(student.get_details())
+--------------------------------------------------------------
+
+
+1. Single Inheritence:
+
+	class Animal:
+    		def eat(self):
+        		return "eating..."
+
+
+	from project.animal import Animal
+
+	class Dog(Animal):
+    		def bark(self):
+        		return "barking..."
+
+
+2. Multiple Inheritence:
+
+-----------------------------------------------------------
+	class Person:
+    		def sleep(self):
+        		return "sleeping..."
+
+	class Employee:
+    		def get_fired(self):
+        		return "fired..."
+
+	class Teacher(Person, Employee):
+    		def teach(self):
+        		return "teaching..."
+-----------------------------------------------------
+super() cannot be used in multiple iheritence class:
+-----------------------------------------------------
+
+3. Multilevel Inheritence:
+
+	class Vehicle:
+    		def move(self):
+        		return "moving..."
+
+
+	from project_miltilevel_inher.vehicle import Vehicle
+
+	class Car(Vehicle):
+    		def drive(self):
+        		return "driving..."
+
+
+	from project_miltilevel_inher.car import Car
+
+	class SportsCar(Car):
+    		def race(self):
+        		return "racing..."
+
+
+4, Hierarchical Inheritence:
+
+	class Animal:
+    		def eat(self):
+        		return "eating..."
+
+
+	from project_hierarchical_inher.animal import Animal
+
+	class Cat(Animal):
+   		def meow(self):
+        		return "meowing..."
+
+
+	from project_hierarchical_inher.animal import Animal
+
+	class Dog(Animal):
+    		def bark(self):
+        		return "barking..."
+
+
+6. MRO--> method resolution order -> mro(): used mostly in multiple and mutlilevel inheritences. Show hierarchical tree
+	
+	class A:
+    		pass
+	class B(A):
+    		pass
+	class C(A):
+    		pass
+	class D(B, C):
+	    	pass
+	print(D.mro())
+
+# [<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]
+
+
+--------------------------------------------------------------------
+class CTO(TechnicalLead):	# show us hierarchical structure tree
+	pass
+print(CTO.mro())
+--------------------------------------------------------------------
+
+
+6. Mixins
+
+	class that add specific set of features in many different classes, but is not base class, have no instances. Used is frameworks like Django.
+--------------------------------------------------------------------
+example:
+
+class PrintableMixin:
+    def print_info(self):
+        print(f'Object of class {type(self).__name__}')     # return type of object --> Object of class Person
+        for attr, value in self.__dict__.items():
+            print(f'{attr}: {value}')
+
+
+class Person(PrintableMixin):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def say_hello(self):
+        print(f'Hello, my name is {self.name}and I\'m {self.age} years old')
+
+
+p1 = Person('John', 20)
+p1.say_hello()
+p1.print_info()
+
+# Hello, my name is Johnand I'm 20 years old
+# Object of class Person
+# name: John
+# age: 20
+-------------------------------------------------------------------
+
+Exercise:
+
+DRY - dont repeat yourself !!! 
+
+self.__class__.__name__ --> return class name of the object
+
+-------------------------------------------------------------------
+how yo import hardcoded attributes and change them for each class:
+
+Base Class:
+	class Vehicle:
+    	DEFAULT_FUEL_CONSUMPTION = 1.25
+
+    	def __init__(self, fuel: float, horse_power: int):
+        self.fuel = fuel
+        self.horse_power = horse_power
+        self.fuel_consumption: float = self.DEFAULT_FUEL_CONSUMPTION
+        # using self.DEFAULT_FUEL_CONSUMPTION gurantees every inheritance class he same attribute
+
+Secondary Class:
+	class Car(Vehicle):
+    	DEFAULT_FUEL_CONSUMPTION: [float, int] = 3
+--------------------------------------------------------------------------------------------------
+
+How to create repository for collections: 
+
+Base Clas:
+	
+class Product:
+    	def __init__(self, name: str, quantity: int):
+        	self.name = name
+        	self.quantity = quantity
+
+    	def decrease(self, quantity: int):
+        	if self.quantity >= quantity:
+            	self.quantity -= quantity
+
+   	def increase(self, quantity: int):
+        	self.quantity += quantity
+
+    	def __repr__(self):
+        	return self.name
+
+
+Secondary Class1:
+
+from project_shop.product import Product
+
+class Drink(Product):
+    	QUANTITY = 10       # set hard coded quantity
+
+    	def __init__(self, name: str):
+        	super().__init__(name, Drink.QUANTITY)      
+		# import attributes form class Product and set the QUANTITY
+
+
+Secondary class2:
+
+from project_shop.product import Product
+
+class Food(Product):
+    QUANTITY = 15   # set hard coded quantity
+
+    	def __init__(self, name):
+        	super().__init__(name, Food.QUANTITY)   
+		# import attributes form class Product and set the QUANTITY
+
+Repository Class:
+
+from typing import List                 # import List
+from project_shop.product import Product     # import Product
+
+
+class ProductRepository(Product):               # define ProductRepository class
+
+    def __init__(self):
+        self.products: List[Product] = []       # set empty list as a collection of objects of type Product
+
+    def add(self, product: Product) -> None:    # define add method with object input type Product
+        self.products.append(product)           # add to collection
+
+    def find(self, product_name: str) -> [Product, None]:   # define find method with name of product
+        for product in self.products:                       # iterate through collection
+            if product.name == product_name:                # check if product exists in collection
+                return product                              # return product if exists
+
+    def remove(self, product_name: str) -> None:            # define remove method with name of product
+        product = self.find(product_name)                   # find product in collection
+        if product:                                         # if product exists
+            self.products.remove(product)                   # remove product from collection
+
+    def __repr__(self):                                     # define __repr__ method
+        return '\n'.join([f"{k}: {k.quantity}" for k in self.products])     # return string representation of collection
+----------------------------------------------------------------------------------------------
+
