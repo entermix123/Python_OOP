@@ -1,0 +1,145 @@
+Decorators: 
+
+Can change the behavior of the function or class without changing the code of the function or the class! We can use one decorator on meny functions as needed!
+
+	* Wrap, extend (разширява) the function ор цласс with additional logic!
+
+Summary: 
+▪ Functions can return other functions
+▪ When a nested function accesses the outer scope of the enclosing function, it is called a closure and save state even when the outer function end execution
+▪ Decorators wrap another function to extend the behavior of wrapped function
+
+Example with function:
+----------------------------------------------------------------------------------
+def my_decorator(func):                 # require function
+
+    def wrapper():                      # create wrapper function
+        print('Before func is called')  # first print before function say_hello()
+        func()                          # call the actual function say_hello(): print('Hello')
+        print('After func is called')   # second print after func say_hello()
+    return wrapper			    # return wrapper function
+
+
+@my_decorator    # call the additional functionality in my_decorator, function wrapper()
+def say_hello():
+    print('Hello')
+
+
+say_hello()     # call the decorator function of say_hello() - my_decorator(say_hello)
+
+
+# result:
+# Before func is called
+# Hello
+# After func is called
+------------------------------------------------------------------------------------
+Example with class:
+
+# Example with Class
+def my_decorator(cls):              # create function that require class
+    class NewClass(cls):            # create new class same as required class
+        def new_method(self):       # create method for the new class
+            print('New method')     # make functionality
+    return NewClass                 # return the instance of the new class
+
+
+@my_decorator                       # set decorator for the class MyClass
+class MyClass:
+
+    def original_method(self):      # existing function of class MyClass
+        print('Original method')
+
+
+my_object = MyClass()           # create instance of the class MyClass
+my_object.original_method()     # call the original method of class MyClass
+my_object.new_method()          # call the new method of decorator class NewClass
+------------------------------------------------------------------------------------
+
+Is important to know functools module: import functools
+
+Example Decorator maker:
+------------------------------------------------------------------------------------
+def multiply(times):                                    # create decorator maker
+    # return lambda f: lambda *args, **kwargs: f(*args, **kwargs) * times   # one line solution bad for reading
+    def decorator(function):                            # create decorator function
+        def wrapper(*args, **kwargs):                   # create wrapper function
+            return function(*args, **kwargs) * times    # return result of original function
+        return wrapper                                  # return wrapper function
+    return decorator                                    # return decorator function
+
+
+@multiply(3)            # use decorator function 3 times
+def add_ten(number):
+    return number + 10
+
+
+print(add_ten(3))
+------------------------------------------------------------------------------------
+
+Build in decorators:
+
+▪ @classmethod - decorator function that converts a method to a class method
+
+▪ @abstractmethod - decorator function that converts an instance method to an abstract instance method
+
+▪ @abstractclassmethod - decorator function that converts a class method to an abstract class method
+
+▪ @property - change your class methods/attributes so that the user of a class doesn't need to make any change in their code
+	
+
+
+Use class as Decorator we have to implement the __call__ method:
+
+Example Classes as Decorators:
+----------------------------------------------------------------------------
+class Cached:
+    def __init__(self, func):       # create an instance of the class Cached
+        self.func = func            # set the function to self.func
+        self.cache = {}             # create a cache for the function
+
+    def __call__(self, *args):          # call function with args
+        if args in self.cache:          # if there is a result of this input in the cache
+            return self.cache[args]     # return it
+        result = self.func(*args)       # if there is not result in cache, execute it 
+        self.cache[args] = result       # store the result in the cache
+        return result                   # return the result
+
+
+@Cached
+def example(x):
+    result = x ** 2 + 3 * x + 1
+    return result
+
+
+print(example(2))   # slow, first time through
+print(example(2))   # fast, already exist in cache
+print(example(3))   # slow, first time through
+print(example(3))   # fast
+----------------------------------------------------------------------------------------
+
+
+Decorators can stack
+----------------------------------------------------------------------------------------
+Example:
+
+def repeat_n_times(n):          # decorator maker
+    def decorator(func):        # decorator function receive function hello(name) with argument John
+        def wrapper(*args):     # wrapper function - actual logic
+            for _ in range(n):  # the logic
+                func(*args)
+
+            # return wrapper result
+        return wrapper          # return the wrapper function
+    return decorator            # return the decorator function
+
+
+@repeat_n_times(2)  	# decorators can stack multiple times. In this case function will be executed 5 * 2 = 10 times
+@repeat_n_times(5)              # pass argument 5 to decorator maker
+def hello(name):                # pass argument hello(name) to decorator outer function
+    print(f"Hello, {name}")     # logic of function hello(name)
+
+
+hello("John")                   # call hello function hello() with argument John
+----------------------------------------------------------------------------------------
+
+profiling of code is to measure time of execution of part of the code and mark where we should optimise for better results.
