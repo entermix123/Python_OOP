@@ -1,0 +1,52 @@
+Design patterns are 22 in total. Check additional info: https://refactoring.guru/design-patterns
+Unified Modeling Language (UML) Diagrams are used throughout this book to help describe the
+patterns.
+
+Main design patterns:
+
+1. Creational patterns
+
+	▪ Deal with initialization and configuration of classes and objects
+
+	Purposes:
+		▪ Deal with object creation mechanisms
+		▪ Trying to create objects in a manner suitable to the situation
+		▪ Two main ideas
+			▪ Encapsulating knowledge about which classes the system uses
+			▪ Hiding how instances of these classes are created
+
+* Singleton design pattern - assure one instance is used when more than one is created, they refer to only one object! anti-pattern - create coplexity in the code
+
+* Factory - favoriite - abstract factory design pattern
+
+1. Structural
+
+	▪ Describe ways to assemble objects to implement new functionality
+	▪ Composition of classes and objects
+
+
+* Facade pattern - make facade interface for the client - computer example. Many components behind: cpu, memory, hdd...every component have own action. Client work with base class Computer that uses these subclases (the components). The client interact only with Computer class but every subclass is affected.
+
+* Decorator pattern - example for read_data, write_data wiht decorator for encryption and decryption
+
+1. Behavioral patterns
+
+	▪ Deal with dynamic interactions among societies of classes
+	▪ Distribute responsibility
+
+* Observer most used - one-to-many: when one object change state, all his dependancies are notified and updated automatically!
+
+* iterator - iterate true structure of data and returns objects
+
+* Command 
+	- An object encapsulates all the information needed to call a method later
+	- Let's you parameterize clients with different requests, queue or log requests, and support undoable operations
+
+example remote control: D:\Python Projects\SoftUniOOPFeb2023\11. Design Patterns\command_design_pattern_example.py
+
+
+
+
+Django Behavioral Design pattern:
+D:\Python Projects\SoftUniOOPFeb2023\11. Design Patterns\model_view_controller_design_patern_django.py
+
