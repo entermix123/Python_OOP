@@ -1,0 +1,154 @@
+Magic methods (dunder - double underscore) - used for communication between custom classes and external calsses!
+
+__init__(self, par1, par2...): - initialization
+
+__str__(self): - retunr string values, between __repr__ and __str__ return __str__ by default
+
+__repr__(self): - same a __str__ but for debiging visible for the coputer, example: SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+__eq__(self, other): - check equivalent example SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+__len__(self, items): - check len of items, example SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+__getitems__(self, index): - check index in list, example: SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+__add__(self, x, y): sum of 2 parameters, example: SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+__doc__ - used in print(class_name.__doc__); print(class_name.class_method.__doc__), example: SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+__dict__ - used to get data in dict form form classes: data = class_instance.__dict__. return dictionary of attributes of class instances. result can be iterated.
+example: SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+-----------------------------------------------------------------------
+what is sigleten pattern? 99% included in quaestions of the interviews! - model for proection of creation of only one instance of the class in the life of the project!
+
+pros:
+	- restriction for simultaneously access to shared resources
+-----------------------------------------------------------------------
+
+
+class attributes are defined before __init__ method:
+---------------------------------------------------------
+class Person:
+	species = 'mammal'			# class attribure
+
+	def __init__(self, name, age):
+		self.name = name
+		self.age = age
+
+person1 = ('Andon', 35)
+person2 = ('Jack', 25)
+
+print(person1.species)	# mammal
+print(person2.species)	# mammal
+---------------------------------------------------------
+
+Class attributes and instance attributes:
+
+calss attributes are shared for all instances of the class!
+
+instance attributes are not shared for all class instances, but inly for specific instance !!!
+
+calss and instance attributes can be changed outside of the class and can be created new values but is not a good practice !!!
+
+example: SoftUniOOPFeb2023/Classes and objects/dunder_meths
+
+---------------------------------------------------------------------------------------------
+Searching in list of names with filter() and lambda using next()!
+
+list_data = ['danio', 'joro' , 'pesho', 'strahil']
+searched_data = 'pesho'
+try:
+	match = next(filter(lambda x: x == searched_data, list_data))	# replace for cycle to iterate true list_data!!!
+	print(match)
+except StopIteration:
+	return f"{searched_data} is not found!"                             # if no match return message
+
+# if there is no match error StopIteration appears !!! It is like index error in case out of range action !!!
+# next() returns first matched element !!! filter() is iterator and next() take first element from filter()!!!
+# example is in SoftUniOOPFeb2023/First steps in OOP/Exercise/project/trainer/row 17-37
+-----------------------------------------------------------------------
+IMPORTANT:
+
+IF WE HAVE PROBLEMS WITH IMPORTS IN THE DIFFERENT FILES, WE HAVE TO SET DIRECTORY ABOVE PROJECT DIRECTORY AS SOURCE DIRECTORY:
+
+RIGHT CLICK/MARK DIRECTORY AS/SOURCE ROOT
+----------------------------------------------------------------------
+
+
+----------------------------------------------------------------------
+
+When we want to return details of some class instances we can proceed like:
+
+	1. know the function that take information about the instance: instance.details()
+
+		details(self):
+			return f"Parameter1: {self.parameter1}, Parameter2: {self.parameter2}"
+
+	2. make object that contains all details in appropriate style:
+
+		object = '\n'.join([p.details() for p in self.list_of_instances])
+
+	3. call function that calls details for every class object
+
+		    def view_class_obect(self):
+        		instance_object = '\n'.join([p.details() for p in self.list_of_instances])
+        		return f"class object {self.name}:\n" \
+               		 f"{instance_object}"
+
+--------------------------------------
+Second way: 
+
+    def view_section(self):
+        info = '\n'.join([p.details() for p in self.list]) # where details() retunr needed data
+        return f"Section {self.name}:\n" \
+               f"{info}"
+--------------------------------------
+---------------------------------------------------------------------
+
+Find object in list of iterables from another class:
+
+      def complete_task(self, task_name: str):
+        try:
+		# comprehension , but iterate true all data, slow for big data
+            task = ''.join(x[0] for x in self.tasks if x.name == task_name)
+		# next(), filter() and lambda comprehension - most used and fast 
+            task = next(filter(lambda u: u.name == task_name, self.tasks))
+            if task in self.tasks:
+                task.completed = True
+                return f"Completed task {task_name}"
+        except StopIteration:
+            return f"Could not find task with the name {task_name}"
+
+--------------------------------------------------------------------
+
+How to import different instances from other classes and work with all of them:
+
+	class Registration:
+
+    def add_user(self, user: User, library: Library) -> [str, None]:
+        if user in library.user_records:
+            return f"User with id = {user.user_id} already registered in the library!"
+
+        library.user_records.append(user)
+
+example: D:\Python Projects\SoftUniOOPFeb2023\2. Classes and Objects\project_library\registration.py
+--------------------------------------------------------------------
+
+How to impoer multiple instances from other classes:
+
+	class Album:
+
+    def __init__(self, name: str, *songs: Song):     # receive one or more song names 
+        self.name = name
+        self.songs: List[Song] = list(songs)               # list(*(unpack)songs)
+        self.published: bool = False
+
+example: D:\Python Projects\SoftUniOOPFeb2023\2. Classes and Objects\project_songs\album.py
+--------------------------------------------------------------------
+
+
+
+	
+
+	

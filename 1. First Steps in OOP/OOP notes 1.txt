@@ -1,0 +1,319 @@
+-----------------------------------------------------------------------
+IMPORTANT:
+
+IF WE HAVE PROBLEMS WITH IMPORTS IN THE DIFFERENT FILES, WE HAVE TO SET DIRECTORY ABOVE PROJECT DIRECTORY AS SOURCE DIRECTORY:
+
+RIGHT CLICK/MARK DIRECTORY AS/SOURCE ROOT
+----------------------------------------------------------------------
+
+The Four Basics Concepts of OOP
+
+▪ INHERITANCE - extend the functionality of the code's
+existing classes to eliminate repetitive code
+
+----------------------------------------------------------
+# INHERITANCE
+
+class Person:
+    def __init__(self, name):
+        self.name = name
+        self.hobbies = []
+
+    def add_hobby(self, hobby):
+        self.hobbies.append(hobby)
+
+    def __str__(self):
+        return F'{self.name} has {self.hobbies}'
+
+
+class FootballPlayer(Person):
+    def __init__(self, name):
+        super().__init__(name)          # inheritance from Person class
+        self.add_hobby('Football')
+        self.add_hobby('Fitness')
+
+
+mike = FootballPlayer('Mike')
+print(mike)
+
+
+---------------------------------------------------------
+
+▪ ENCAPSULATION - stop objects from interacting with each
+other so classes cannot change or interact with the
+specific variables and functions of an object
+Example:
+----------------------------------------------------------
+
+# ENCAPSULATION
+# _balance and _account_number are encapsulated in the class, they cannot be accessed outside the class
+# they can be accessed only by methods of the class, like getter, setter and withdraw methods
+class BankAccount:
+    def __init__(self, _account_number, balance):
+        self._balance = balance
+        self._account_number = _account_number
+
+    def get_balance(self):
+        return self._balance
+
+    def deposit(self, amount):
+        self._balance += amount
+        return self._balance
+
+    def withdraw(self, amount):
+        if amount > self._balance:
+            print("Insufficient funds")
+        else:
+            self._balance -= amount
+            return self._balance
+
+
+account1 = BankAccount("1234567890", 1000)
+print(account1.get_balance())
+account1.deposit(500)
+print(account1.get_balance())
+account1.withdraw(2100)
+
+---------------------------------------------------------
+
+▪ ABSTRACTION - isolate the impact of changes made to the
+code so the change will only affect the variables shown
+and not the outside code
+
+---------------------------------------------------------
+# ABSTRACTION
+# base classes that can have fewer methods 3-5 that can be inhereted by mass used classes.
+# Good practice is that they should not be called dirrectly, but only by other classes.
+
+from abc import ABC, abstractmethod
+
+
+class Animal(ABC):          # Abstract class. Give us possibility not to specify next class parameters every time.
+    @abstractmethod
+    def make_sound(self):
+        pass
+
+
+class Dog(Animal):	    # inheret methods of Animal class - make_sound() 
+    def make_sound(self):
+        print("Woof!")
+
+
+class Cat(Animal):
+    def make_sound(self):
+        print("Meow!")
+
+
+class Bird(Animal):
+    def make_sound(self):
+        print("quaa!")
+
+
+dog = Dog()
+cat = Cat()
+bird = Bird()
+
+dog.make_sound()
+cat.make_sound()
+bird.make_sound()
+
+---------------------------------------------------------
+
+▪ Polymorphism - allows different classes to have
+methods with the same name
+
+--------------------------------------------------------
+# POLIMORPHISM
+# allow objects of different classes to be treated like they are from same class over shared interface or behavior
+# can be achieved by removing of overloading.
+
+
+class Animal:   		# Polymorph class. Give us possibility set behaviors to other classes for same interface and environment
+    def speak(self):
+        print("Animal speak")
+
+
+class Dog(Animal):
+    def speak(self):
+        print("Dog speak")
+
+
+class Cat(Animal):
+    def speak(self):
+        print("Cat speak")
+
+
+animal = Animal()
+dog = Dog()
+cat = Cat()
+
+animal.speak()
+dog.speak()
+cat.speak()
+--------------------------------------------------------
+
+
+Scope rules:
+
+Global values cannot be changed or modified by action in some function. Shoild be specified that the focused value is global:
+-----------------------------------
+a = 1		# defined global value
+
+
+def func():		# function
+    global a	# specified that a is global, if 'global a' is not present, error will occure
+    a += 2
+    print(a)
+    
+
+func()
+----------------------------------------------------------------------------
+
+x = "global"        # global x
+
+
+def outer():
+    x = "local"
+
+    def inner():
+        nonlocal x          # change x in outer() to 'nonlocal'
+        x = "nonlocal"
+        print("inner:", x)
+
+    def change_global():
+        global x                # change global x to "global: changed!"
+        x = "global: changed!"
+
+    print("outer:", x)
+    inner()
+    print("outer:", x)
+    change_global()
+
+
+print(x)
+outer()
+print(x)
+
+# output
+# global
+# outer: local
+# inner: nonlocal
+# outer: nonlocal
+# global: changed!
+---------------------------------------------------------------------------
+
+
+BASIC OOP:
+
+# Definition of methods in classes:
+
+def __init__(self, parameter1, parameter2 ...)		# first and mandatory method __init__
+	self.parameter1 = parameter1
+	self.parameter2 = parameter2
+	...
+
+def __repr__(slef, 
+
+
+Anotation:
+
+def defend(self, damage: int) -> str: 		# defines that the method return string
+
+void class method are method that return NONE
+
+---------------------------------------------------------------------------------------------
+Searching in list of names with filter() and lambda using next()!
+
+list_data = ['danio', 'joro' , 'pesho', 'strahil']
+searched_data = 'pesho'
+
+match = next(filter(lambda x: x == searched_data, list_data))	# replace for cycle to iterate true list_data!!!
+print(match)
+
+# if there is no match error StopIteration appears !!! It is like index error in case out of range action !!!
+# next() returns first matched element !!! filter() is iterator and next() take first element from filter()!!!
+# example is in SoftUniOOPFeb2023/First steps in OOP/Exercise/project/trainer/row 17-37
+-----------------------------------------------------------------------
+IMPORTANT:
+
+IF WE HAVE PROBLEMS WITH IMPORTS IN THE DIFFERENT FILES, WE HAVE TO SET DIRECTORY ABOVE PROJECT DIRECTORY AS SOURCE DIRECTORY:
+
+RIGHT CLICK/MARK DIRECTORY AS/SOURCE ROOT
+----------------------------------------------------------------------
+# after class is created and initialized we can verify its properites as:
+# type prop for start getter methods
+# type props for start getter and setter methods
+# type propsd for start getter, setter adn delete methods 
+----------------------------------------------------------------------
+
+When we want to return details of some class instances we can proceed like:
+
+	1. know the function that take information about the instance: instance.details()
+
+		details(self):
+			return f"Parameter1: {self.parameter1}, Parameter2: {self.parameter2}"
+
+	2. make object that contains all details in appropriate style:
+
+		object = '\n'.join([p.details() for p in self.list_of_instances])
+
+	3. call function that calls details for every class object
+
+		    def view_class_obect(self):
+        		instance_object = '\n'.join([p.details() for p in self.list_of_instances])
+        		return f"class object {self.name}:\n" \
+               		 f"{instance_object}"
+
+--------------------------------------
+Second way: 
+
+    def view_section(self):
+        info = '\n'.join([p.details() for p in self.list]) # where details() retunr needed data
+        return f"Section {self.name}:\n" \
+               f"{info}"
+--------------------------------------
+---------------------------------------------------------------------
+
+Find object in list of iterables from another class:
+
+      def complete_task(self, task_name: str):
+        try:
+		# comprehension , but iterate true all data, slow for big data
+            task = ''.join(x[0] for x in self.tasks if x.name == task_name)
+		# next(), filter() and lambda comprehension - most used and fast 
+            task = next(filter(lambda u: u.name == task_name, self.tasks))
+            if task in self.tasks:
+                task.completed = True
+                return f"Completed task {task_name}"
+        except StopIteration:
+            return f"Could not find task with the name {task_name}"
+
+--------------------------------------------------------------------
+
+    @staticmethod
+    def divide(*args):
+        return reduce(lambda x, y: x + y if x == 0 and y == 0 else x / y, args)  # escape divide by zero error
+
+----------------------------------------------------------------------------------------------------------------
+
+Rome numbers transformation function:
+
+class Integer:
+
+    def __init__(self, value: int):
+        self.value = value
+
+    @classmethod
+    def from_roman(cls, value):
+        # dictionary with possible rome values
+        rom_val = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+        int_value = 0   # sum of all values
+        for k in range(len(value)):                         # iterate true len of values
+            if k != 0 and rom_val[value[k]] > rom_val[value[k-1]]:     # check if next value is bigger than previous
+                # if next value is bigger than previous, subtract 2 times the value of previous value
+                int_value += rom_val[value[k]] - 2 * rom_val[value[k-1]]
+            else:
+                int_value += rom_val[value[k]]  # if next value is smaller than previous, add current value to sum
+
+        return cls(int_value)
+----------------------------------------------------------------------------------------------------------------
