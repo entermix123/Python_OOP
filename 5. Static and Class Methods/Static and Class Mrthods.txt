@@ -1,0 +1,108 @@
+Static Method and class Methods:
+
+
+STATIC Methods: DECORATOR: @staticmethod
+
+1. They don't know anything about the class or instace it is called on, and cannot modify any object state or any class state. (encapsulated inside the class)
+	* cannot call instance methods in static methods
+	* can call other static methods in the same class or inherited class
+2. It is written inside the class because is close to the logic of the class and its usage
+
+
+PROS:
+- we can create method that are undependent one of another and class logic
+- exit possibility for accidentally modifing instances or objects (intern mistakes)
+- much easier testing because it is not required to create class object to test the method 
+
+Static have no 'self' in the input of the function:
+class Person:
+
+	def __init__(self, age: int):
+      	self.age = age
+
+	@staticmethod           # decorator for static method       
+    	def is_adult(age):	# static method, because has no self input
+        return age >= 18
+
+person = Person(18)
+print(person.is_adult(16)) # false
+-------------------------------------------------------------------------------------------
+reduce(): # reduce is continuous function that iterate true collection and do actions as set. 
+EXAMPLE: D:\Python Projects\SoftUniOOPFeb2023\5. Static and Class Methods\1_calculator.py
+
+
+-------------------------------------------------------------------------------------------
+from functools import reduce
+
+
+class Calculator:
+
+    @staticmethod
+    def add(*nums):
+        return sum(nums)
+
+    @staticmethod
+    def multiply(*args):
+        return reduce(lambda x, y: x * y, args)     # reduce is continuous function.
+
+    @staticmethod
+    def divide(*args):
+        return reduce(lambda x, y: x + y if x == 0 and y == 0 else x / y, args)  # escape divide by zero error
+
+    @staticmethod
+    def subtract(*args):
+        return reduce(lambda x, y: x - y, args)
+
+
+print(Calculator.add(5, 10, 4))
+print(Calculator.multiply(1, 2, 3, 5))
+print(Calculator.divide(100, 2))
+print(Calculator.subtract(90, 20, -50, 43, 7))
+-----------------------------------------------------------------------------------------------
+
+
+CLASS METHODS: DECORATOR: @classmethod
+
+1. they have access to the class, but not to the instances!
+2. they can modify class state, but not instance state!
+3. used mostly to create controlled objects true class methods
+
+They require argument 'cls', that comes from class. They are used to unify functions for different classes and prevent input mistakes by shortened syntax when called:
+
+PROS:
+
+1. Shortcut to create new objects in class and reduce possibility of mistakes
+2. dont repeat yourself principle DRY
+3.
+
+----------------------------------------------------------------------------
+
+from typing import List
+
+
+class Pizza:
+
+    def __init__(self, ingredients: List[str]):
+        self.ingredients = ingredients
+
+    @classmethod				# Decorator for class method
+    def pepperoni(cls):			# one argument only
+        return cls(["tomato sauce", "parmesan", "pepperoni"])
+
+    @classmethod				# Decorator for class method
+    def quattro_formaggi(cls):	# one argument only
+        return cls(["mozzarella", "gorgonzola", "fontina", "parmigiano"])
+
+
+first_pizza = Pizza.pepperoni()		# short call
+second_pizza = Pizza.quattro_formaggi()	# short call
+third_pizza = Pizza(["tomato sauce", "parmesan", "pepperoni"])	# long call
+-----------------------------------------------------------------------------
+
+Exercise:
+
+reduce
+
+
+
+
